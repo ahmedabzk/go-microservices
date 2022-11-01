@@ -11,7 +11,6 @@ func main(){
 	// This creates a router that can be used to define the build of the application.
 	router := gin.Default()
 
-	routes.UseRouter(router)
 
 	// load the templates
 	router.LoadHTMLGlob("templates/*")
