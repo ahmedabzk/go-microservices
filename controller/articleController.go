@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/ahmedabzk/go-microservices/models"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func GetAllArticles() gin.HandlerFunc {
 			http.StatusOK,
 			"index.html",
 			gin.H{
-				"title":"articles",
+				"title":   "articles",
 				"payload": articles,
 			},
 		)
@@ -24,24 +25,23 @@ func GetAllArticles() gin.HandlerFunc {
 
 func GetArticle() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		articleId := c.Param("article_id")
-
-		article, err := models.GetArticleById(articleId)
-
-		if err != nil{
-			c.HTML(
-				http.StatusBadRequest, 
-				"article.html",
-				gin.H{"payload": err},
-			)
+		if articleId, err := strconv.Atoi(c.Param("article_id")); err == nil {
+			// check if article exsits
+			if article, err := models.GetArticleById(articleId); err == nil {
+				c.HTML(
+					http.StatusOK,
+					"article.html",
+					gin.H{
+						"article": article.Title,
+						"payload": article,
+					},
+				)
+			} else {
+				c.AbortWithError(http.StatusNotFound, err)
+			}
+		} else {
+			c.AbortWithStatus(http.StatusNotFound)
 		}
-		c.HTML(
-			http.StatusOK, 
-			"article.html",
-			gin.H{
-				"article": article.Title,
-				"payload": article,
-			},
-		)
+
 	}
 }
