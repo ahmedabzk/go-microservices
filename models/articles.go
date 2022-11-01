@@ -1,7 +1,9 @@
 package models
 
+import "errors"
+
 type Article struct {
-	ID      int `json:"id"`
+	ID      int    `json:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
@@ -15,4 +17,17 @@ var ArticleList = []Article{
 	{ID: 6, Title: "article six", Content: "content for article six"},
 	{ID: 7, Title: "article seven", Content: "content for article seven"},
 	{ID: 8, Title: "article eight", Content: "content for article eight"},
+}
+
+func ReturnAllArticles() []Article {
+	return ArticleList
+}
+
+func GetArticleById(id int) (*Article, error) {
+	for _, a := range ArticleList {
+		if a.ID == id {
+			return &a, nil
+		}
+	}
+	return nil, errors.New("article not found")
 }

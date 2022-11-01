@@ -1,39 +1,26 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/ahmedabzk/go-microservices/routes"
 	"github.com/gin-gonic/gin"
 )
 
-func main(){
+func main() {
 
 	port := os.Getenv("PORT")
-	if port != ""{
+	if port == "" {
 		port = "3000"
 	}
 	// This creates a router that can be used to define the build of the application.
 	router := gin.Default()
 
-
 	// load the templates
 	router.LoadHTMLGlob("templates/*")
 
-	router.GET("/", func(c *gin.Context) {
-		// Call the HTML method of the Context to render a template
-		c.HTML(
-			http.StatusOK,
-			// use the index.html page
-			"index.html",
-			gin.H{
-				"title":"Home Page",
-			},
-		)
-	})
-
+	// get the router
 	routes.ArticlesRouter(router)
-	
+
 	router.Run(":" + port)
 }
