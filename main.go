@@ -2,12 +2,18 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/ahmedabzk/go-microservices/routes"
 	"github.com/gin-gonic/gin"
 )
 
 func main(){
+
+	port := os.Getenv("PORT")
+	if port != ""{
+		port = "3000"
+	}
 	// This creates a router that can be used to define the build of the application.
 	router := gin.Default()
 
@@ -29,5 +35,5 @@ func main(){
 
 	routes.ArticlesRouter(router)
 	
-	router.Run()
+	router.Run(":" + port)
 }
