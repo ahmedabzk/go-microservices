@@ -12,7 +12,7 @@ import (
 
 var tempArticleList []models.Article
 
-func TestMain(m *testing.M){
+func TestMain(m *testing.M) {
 	// set the gin mode
 	gin.SetMode(gin.TestMode)
 
@@ -21,7 +21,7 @@ func TestMain(m *testing.M){
 }
 
 // helper function to create a router during test
-func GetRouter(withTemplates bool) *gin.Engine{
+func GetRouter(withTemplates bool) *gin.Engine {
 	r := gin.Default()
 
 	if withTemplates {
@@ -31,25 +31,25 @@ func GetRouter(withTemplates bool) *gin.Engine{
 }
 
 // helper function to process a request and test it is response
-func TestHttpResponse(t testing.T, r *gin.Engine, req *http.Request, f func(w *httptest.ResponseRecorder)bool){
-	// create a response recorder 
+func testHTTPResponse(t *testing.T, r *gin.Engine, req *http.Request, f func(w *httptest.ResponseRecorder) bool) {
+	// create a response recorder
 	w := httptest.NewRecorder()
 
 	// create the service and process the request
 	r.ServeHTTP(w, req)
 
-	if !f(w){
+	if !f(w) {
 		t.Fail()
 	}
 
 }
 
 // this function is used to store the main lists for temporary one for test
-func SaveList(){
+func SaveList() {
 	tempArticleList = models.ArticleList
 }
 
 // this function is used to restore the main list from the temporary one
-func RestoreList(){
+func RestoreList() {
 	models.ArticleList = tempArticleList
 }
